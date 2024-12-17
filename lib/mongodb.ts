@@ -3,7 +3,7 @@ import { MongoClient } from 'mongodb'
 const MONGODB_URI = process.env.MONGODB_URI
 
 if (!MONGODB_URI) {
-  console.warn(
+  throw new Error(
     'Please define the MONGODB_URI environment variable inside .env.local'
   )
 }
@@ -19,13 +19,13 @@ if (process.env.NODE_ENV === 'development') {
   }
 
   if (!globalWithMongo._mongoClientPromise) {
-    client = new MongoClient(MONGODB_URI || 'mongodb://localhost:27017/google_api_testing')
+    client = new MongoClient(MONGODB_URI)
     globalWithMongo._mongoClientPromise = client.connect()
   }
   clientPromise = globalWithMongo._mongoClientPromise
 } else {
   // In production mode, it's best to not use a global variable.
-  client = new MongoClient(MONGODB_URI || 'mongodb://localhost:27017/google_api_testing')
+  client = new MongoClient(MONGODB_URI)
   clientPromise = client.connect()
 }
 

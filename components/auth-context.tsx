@@ -1,48 +1,30 @@
 "use client"
 
-import React, { createContext, useState, useContext, useEffect } from 'react'
-
-interface User {
-  email: string
-}
+import { createContext, useContext, useState, useEffect } from 'react'
+import { Session } from 'next-auth'
+import { useSession } from 'next-auth/react'
 
 interface AuthContextType {
-  user: User | null
-  login: (email: string, password: string) => Promise<void>
-  logout: () => void
+  session: Session | null
+  status: 'loading' | 'authenticated' | 'unauthenticated'
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
+const AuthContext = createContext<AuthContextType>({
+  session: null,
+  status: 'loading'
+})
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
+  const { data: session, status } = useSession()
 
-  useEffect(() => {
-    // Check if user is stored in localStorage
-    const storedUser = localStorage.getItem('user')
-    if (storedUser) {
-      setUser(JSON.parse(storedUser))
-    }
-  }, [])
-
-  const login = async (email: string, password: string) => {
-    // This is a mock login. In a real app, you'd validate against a backend.
-    if (email && password) {
-      const user = { email }
-      setUser(user)
-      localStorage.setItem('user', JSON.stringify(user))
-    } else {
-      throw new Error('Invalid credentials')
-    }
-  }
-
-  const logout = () => {
-    setUser(null)
-    localStorage.removeItem('user')
+  // Provide a default value when session is undefined
+  const contextValue: AuthContextType = {
+    session: session ?? null,
+    status: status ?? 'loading'
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   )

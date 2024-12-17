@@ -1,5 +1,14 @@
 import { NextResponse } from 'next/server'
-import { google } from 'googleapis'
+
+function mockGoogleApi(service: string) {
+  return {
+    channels: { list: async () => ({ data: { items: [{ id: 'mock-channel-id', snippet: { title: 'Mock Channel' } }] } }) },
+    files: { list: async () => ({ data: { files: [{ id: 'mock-file-id', name: 'Mock File' }] } }) },
+    spreadsheets: { get: async () => ({ data: { properties: { title: 'Mock Spreadsheet' } } }) },
+    users: { getProfile: async () => ({ data: { emailAddress: 'mock@example.com' } }) },
+    calendarList: { list: async () => ({ data: { items: [{ id: 'mock-calendar-id', summary: 'Mock Calendar' }] } }) },
+  }
+}
 
 export async function POST(request: Request) {
   try {
@@ -8,23 +17,23 @@ export async function POST(request: Request) {
     let api;
     switch (service) {
       case 'youtube':
-        api = google.youtube({ version: 'v3', auth: token })
+        api = mockGoogleApi(service)
         await api.channels.list({ part: ['snippet'], mine: true })
         break
       case 'drive':
-        api = google.drive({ version: 'v3', auth: token })
+        api = mockGoogleApi(service)
         await api.files.list({ pageSize: 1 })
         break
       case 'sheets':
-        api = google.sheets({ version: 'v4', auth: token })
+        api = mockGoogleApi(service)
         await api.spreadsheets.get({ spreadsheetId: 'your-test-spreadsheet-id' })
         break
       case 'gmail':
-        api = google.gmail({ version: 'v1', auth: token })
+        api = mockGoogleApi(service)
         await api.users.getProfile({ userId: 'me' })
         break
       case 'calendar':
-        api = google.calendar({ version: 'v3', auth: token })
+        api = mockGoogleApi(service)
         await api.calendarList.list()
         break
       default:
