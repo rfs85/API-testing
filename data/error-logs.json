@@ -1,0 +1,38 @@
+[
+  {
+    "_id": { "$oid": "60d5ecb54f3f7f001b9e5b1f" },
+    "createdAt": { "$date": "2023-06-25T11:16:00.000Z" },
+    "service": "Google Drive API",
+    "error": "Insufficient permissions",
+    "details": "User does not have write access to the specified folder. Required permission: https://www.googleapis.com/auth/drive.file"
+  },
+  {
+    "_id": { "$oid": "60d5ecb54f3f7f001b9e5b20" },
+    "createdAt": { "$date": "2023-06-25T14:46:00.000Z" },
+    "service": "Google Calendar API",
+    "error": "Invalid time range",
+    "details": "End time (2023-06-25T14:00:00Z) must be after start time (2023-06-25T15:00:00Z)"
+  },
+  {
+    "_id": { "$oid": "60d5ecb54f3f7f001b9e5b21" },
+    "createdAt": { "$date": "2023-06-25T16:00:00.000Z" },
+    "service": "YouTube Data API",
+    "error": "Quota exceeded",
+    "details": "Daily limit of 10000 units for youtube.search.list has been reached. Limit will reset at midnight PST (UTC-8)"
+  },
+  {
+    "_id": { "$oid": "60d5ecb54f3f7f001b9e5b22" },
+    "createdAt": { "$date": "2023-06-25T17:30:00.000Z" },
+    "service": "Google Sheets API",
+    "error": "Invalid cell reference",
+    "details": "Cell reference 'Z999' is out of range. Maximum column is 'XFD' and maximum row is 1048576"
+  },
+  {
+    "_id": { "$oid": "60d5ecb54f3f7f001b9e5b23" },
+    "createdAt": { "$date": "2023-06-25T18:45:00.000Z" },
+    "service": "Gmail API",
+    "error": "Authentication failed",
+    "details": "Invalid credentials provided for Gmail API access. Error code: 401 Unauthorized"
+  }
+]
+
