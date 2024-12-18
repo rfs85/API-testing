@@ -1,3 +1,4 @@
+import { Suspense } from "react"
 import { Zap, Shield, Rocket, Youtube, FileText, Mail, Calendar, Loader2 } from "lucide-react"
 import { getServerSession } from "next-auth"
 import { authOptions } from "lib/auth"
