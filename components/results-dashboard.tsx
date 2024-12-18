@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
-import { useToast } from '@/components/use-toast'
+import { useToast } from '@/hooks/use-toast'
 
 interface TestResult {
   _id: string
@@ -114,4 +114,3 @@ export function ResultsDashboard() {
     </div>
   )
 }
-

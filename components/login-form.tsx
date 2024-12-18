@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
-import { useToast } from '@/components/use-toast'
+import { useToast } from '@/hooks/use-toast'
 
 export function LoginForm() {
   const [isLoading, setIsLoading] = useState(false)
@@ -48,4 +48,3 @@ export function LoginForm() {
     </Card>
   )
 }
-

@@ -5,7 +5,7 @@ import { useAuth } from '@/contexts/auth-context'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useToast } from '@/components/use-toast'
+import { useToast } from '@/hooks/use-toast'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Textarea } from '@/components/ui/textarea'
@@ -16,12 +16,12 @@ export default function DriveApiTestPage() {
   const [fileId, setFileId] = useState('')
   const [fileName, setFileName] = useState('')
   const [fileContent, setFileContent] = useState('')
-  const [testType, setTestType] = useState('read')
+  const [testType, setTestType] = useState<'read' | 'write'>('read')
   const [isLoading, setIsLoading] = useState(false)
   const { user } = useAuth()
   const { toast } = useToast()
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsLoading(true)
 
@@ -74,7 +74,7 @@ export default function DriveApiTestPage() {
               <Input
                 id="apiKey"
                 value={apiKey}
-                onChange={(e) => setApiKey(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setApiKey(e.target.value)}
                 required
                 placeholder="Enter your Google Drive API Key"
               />
@@ -91,7 +91,7 @@ export default function DriveApiTestPage() {
                     <Input
                       id="folderId"
                       value={folderId}
-                      onChange={(e) => setFolderId(e.target.value)}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFolderId(e.target.value)}
                       placeholder="Enter a Google Drive Folder ID"
                     />
                   </div>
@@ -100,7 +100,7 @@ export default function DriveApiTestPage() {
                     <Input
                       id="fileId"
                       value={fileId}
-                      onChange={(e) => setFileId(e.target.value)}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFileId(e.target.value)}
                       placeholder="Enter a Google Drive File ID"
                     />
                   </div>
@@ -113,7 +113,7 @@ export default function DriveApiTestPage() {
                     <Input
                       id="fileName"
                       value={fileName}
-                      onChange={(e) => setFileName(e.target.value)}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFileName(e.target.value)}
                       placeholder="Enter a name for the new file"
                     />
                   </div>
@@ -122,7 +122,7 @@ export default function DriveApiTestPage() {
                     <Textarea
                       id="fileContent"
                       value={fileContent}
-                      onChange={(e) => setFileContent(e.target.value)}
+                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFileContent(e.target.value)}
                       placeholder="Enter the content for the new file"
                       rows={4}
                     />
@@ -130,15 +130,14 @@ export default function DriveApiTestPage() {
                 </div>
               </TabsContent>
             </Tabs>
+            <CardFooter>
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? 'Testing...' : 'Run Google Drive API Test'}
+              </Button>
+            </CardFooter>
           </form>
         </CardContent>
-        <CardFooter>
-          <Button type="submit" disabled={isLoading} onClick={handleSubmit}>
-            {isLoading ? 'Testing...' : 'Run Google Drive API Test'}
-          </Button>
-        </CardFooter>
       </Card>
     </div>
   )
 }
-
