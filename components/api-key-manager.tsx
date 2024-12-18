@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
@@ -30,27 +30,29 @@ export function ApiKeyManager() {
   const [isLoading, setIsLoading] = useState(true)
   const { toast } = useToast()
 
-  const fetchApiKeys = async () => {
+  const fetchApiKeys = useCallback(async () => {
     try {
       const response = await fetch('/api/api-keys')
-      if (!response.ok) throw new Error('Failed to fetch API keys')
-      const data = await response.json()
+      if (!response.ok) {
+        throw new Error('Failed to fetch API keys')
+      }
+      const data: ApiKey[] = await response.json()
       setApiKeys(data)
     } catch (error) {
       console.error('Error fetching API keys:', error)
       toast({
         title: 'Error',
-        description: 'Failed to load API keys. Please try again.',
+        description: 'Failed to fetch API keys.',
         variant: 'destructive',
       })
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [toast])
 
   useEffect(() => {
     fetchApiKeys()
-  }, [])
+  }, [fetchApiKeys])
 
   const handleAddKey = async () => {
     if (newKeyName && newApiKey && newProjectId) {

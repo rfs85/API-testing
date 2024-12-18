@@ -23,6 +23,10 @@ export function TokenTestForm() {
   const [isLoading, setIsLoading] = useState(false)
   const { toast } = useToast()
 
+  const fetchData = async () => {
+    // Define your data fetching logic here
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
@@ -40,7 +44,6 @@ export function TokenTestForm() {
         throw new Error('Token test failed')
       }
 
-      const data = await response.json()
       toast({
         title: 'Token Test Successful',
         description: `Your ${service} API token is valid.`,
