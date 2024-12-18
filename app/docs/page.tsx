@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 export default function DocsPage() {
   return (
@@ -12,7 +12,7 @@ export default function DocsPage() {
           </CardHeader>
           <CardContent>
             <ol className="list-decimal list-inside space-y-2">
-              <li>Sign up for a Google Cloud account and create a new project..</li>
+              <li>Sign up for a Google Cloud account and create a new project.</li>
               <li>Enable the APIs you want to test in the Google Cloud Console.</li>
               <li>Create an API key for your project.</li>
               <li>Use the API key and project ID in our testing form.</li>
