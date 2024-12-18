@@ -2,11 +2,11 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Link from 'next/link'
-import { ThemeProvider } from "components/theme-provider"
-import { ModeToggle } from "components/mode-toggle"
-import { AuthProvider } from 'contexts/auth-context'
-import { UserMenu } from 'components/user-menu'
-import { ToastProvider } from "components/ui/toast"
+import { ThemeProvider } from "@/components/theme-provider"
+import { ModeToggle } from "@/components/mode-toggle"
+import { AuthProvider } from '@/contexts/auth-context'
+import { UserMenu } from '@/components/user-menu'
+import { ToastProvider } from "@/components/ui/toast"
 
 const inter = Inter({ subsets: ['latin'] })
 

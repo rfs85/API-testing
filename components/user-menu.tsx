@@ -1,9 +1,9 @@
 "use client"
 
 import Link from 'next/link'
-import { useAuth } from 'contexts/auth-context'
-import { Avatar, AvatarFallback, AvatarImage } from 'components/ui/avatar'
-import { Button } from 'components/ui/button'
+import { useAuth } from '@/contexts/auth-context'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,7 +11,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from 'components/ui/dropdown-menu'
+} from '@/components/ui/dropdown-menu'
 
 export function UserMenu() {
   const { user, login, logout } = useAuth()

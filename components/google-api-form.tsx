@@ -1,18 +1,19 @@
 "use client"
 
 import { useState } from 'react'
-import { Button } from 'components/ui/button'
-import { Input } from 'components/ui/input'
-import { Label } from 'components/ui/label'
-import { useToast } from 'hooks/use-toast'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from 'components/ui/card'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'components/ui/select'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from 'components/ui/tabs'
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from 'components/ui/accordion'
-import { Alert, AlertDescription, AlertTitle } from 'components/ui/alert'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { useToast } from 'components/ui/use-toast'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Loader2, CheckCircle, XCircle } from 'lucide-react'
-import { Badge } from 'components/ui/badge'
-import { Progress } from 'components/ui/progress'
+import { Badge } from '@/components/ui/badge'
+import { Progress } from '@/components/ui/progress'
+import { ErrorBoundary } from '@/components/error-boundary'
 
 const API_SERVICES = [
   { value: 'youtube', label: 'YouTube Data API' },
@@ -123,6 +124,7 @@ export default function GoogleApiForm() {
         <CardDescription>Test your Google API credentials and permissions</CardDescription>
       </CardHeader>
       <CardContent>
+        <ErrorBoundary>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid gap-2">
             <Label htmlFor="apiKey">API Key</Label>
@@ -133,6 +135,7 @@ export default function GoogleApiForm() {
               onChange={(e) => setApiKey(e.target.value)}
               required
               placeholder="Enter your Google API Key"
+              aria-label="Google API Key"
             />
           </div>
           <div className="grid gap-2">
@@ -144,11 +147,12 @@ export default function GoogleApiForm() {
               onChange={(e) => setProjectId(e.target.value)}
               required
               placeholder="Enter your Google Cloud Project ID"
+              aria-label="Google Cloud Project ID"
             />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="service">Select Google API Service</Label>
-            <Select onValueChange={setSelectedService} value={selectedService}>
+            <Select onValueChange={setSelectedService} value={selectedService} aria-label="Select Google API Service">
               <SelectTrigger id="service">
                 <SelectValue placeholder="Select a Google API service" />
               </SelectTrigger>
@@ -172,6 +176,7 @@ export default function GoogleApiForm() {
             <TabsContent value="write">Test writing data to the selected API</TabsContent>
           </Tabs>
         </form>
+        </ErrorBoundary>
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button type="submit" disabled={isLoading || !selectedService} onClick={handleSubmit}>
@@ -249,3 +254,4 @@ export default function GoogleApiForm() {
     </Card>
   )
 }
+

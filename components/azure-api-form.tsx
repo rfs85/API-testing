@@ -4,8 +4,9 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useToast } from '@/components/ui/use-toast'
+import { useToast } from 'components/ui/use-toast'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { ErrorBoundary } from '@/components/error-boundary'
 
 export default function AzureApiForm() {
   const [apiKey, setApiKey] = useState('')
@@ -39,7 +40,7 @@ export default function AzureApiForm() {
       console.error('Azure API test error:', error)
       toast({
         title: 'Azure API Test Failed',
-        description: 'An error occurred while testing the Azure API',
+        description: error instanceof Error ? error.message : 'An unknown error occurred while testing the Azure API',
         variant: 'destructive',
       })
     } finally {
@@ -53,28 +54,32 @@ export default function AzureApiForm() {
         <CardTitle>Azure API Test Form</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label htmlFor="apiKey">API Key</Label>
-            <Input
-              id="apiKey"
-              type="text"
-              value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <Label htmlFor="subscriptionId">Subscription ID</Label>
-            <Input
-              id="subscriptionId"
-              type="text"
-              value={subscriptionId}
-              onChange={(e) => setSubscriptionId(e.target.value)}
-              required
-            />
-          </div>
-        </form>
+        <ErrorBoundary>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <Label htmlFor="apiKey">API Key</Label>
+              <Input
+                id="apiKey"
+                type="text"
+                value={apiKey}
+                onChange={(e) => setApiKey(e.target.value)}
+                required
+                aria-label="Azure API Key"
+              />
+            </div>
+            <div>
+              <Label htmlFor="subscriptionId">Subscription ID</Label>
+              <Input
+                id="subscriptionId"
+                type="text"
+                value={subscriptionId}
+                onChange={(e) => setSubscriptionId(e.target.value)}
+                required
+                aria-label="Azure Subscription ID"
+              />
+            </div>
+          </form>
+        </ErrorBoundary>
       </CardContent>
       <CardFooter>
         <Button type="submit" disabled={isLoading} onClick={handleSubmit}>

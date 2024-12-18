@@ -1,10 +1,14 @@
-import { Suspense } from "react"
-import { Zap, Shield, Rocket, Youtube, FileText, Mail, Calendar, Loader2 } from "lucide-react"
-import { getServerSession } from "next-auth"
-import { authOptions } from "lib/auth"
-import { LoginForm } from 'components/login-form'
-import { Button } from 'components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'components/ui/card'
+import { Suspense } from 'react'
+import { getServerSession } from 'next-auth/next'
+import { authOptions } from '@/lib/auth'
+import { ApiKeyManager } from '@/components/api-key-manager'
+import { ResultsDashboard } from '@/components/results-dashboard'
+import { LoginForm } from '@/components/login-form'
+import { TokenTestForm } from '@/components/token-test-form'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import Link from 'next/link'
+import { Loader2, CheckCircle, Zap, Shield, Rocket, Youtube, FileText, Mail, Calendar } from 'lucide-react'
 
 export default async function Home() {
   const session = await getServerSession(authOptions)

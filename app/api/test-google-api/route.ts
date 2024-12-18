@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { RateLimiter } from 'limiter'
+import { google } from 'googleapis'
 
 // Create a rate limiter: 5 requests per minute
 const limiter = new RateLimiter({ tokensPerInterval: 5, interval: 'minute' })
@@ -14,16 +15,16 @@ export async function POST(request: Request) {
   try {
     const { apiKey, projectId, service, testType } = await request.json()
 
-    //const auth = new google.auth.GoogleAuth({
-    //  key: apiKey,
-    //  scopes: [`https://www.googleapis.com/auth/${service}`],
-    //})
+    const auth = new google.auth.GoogleAuth({
+      key: apiKey,
+      scopes: [`https://www.googleapis.com/auth/${service}`],
+    })
 
     const results = []
 
     // Test authentication
     try {
-      //await auth.getClient()
+      await auth.getClient()
       results.push({
         success: true,
         message: 'Authentication successful',
@@ -38,7 +39,7 @@ export async function POST(request: Request) {
     }
 
     // Perform service-specific tests
-    const api = mockGoogleApi(service)
+    const api = google.googleApi(service)
     switch (service) {
       case 'youtube':
         results.push(...await testYouTubeAPI(api, testType))
