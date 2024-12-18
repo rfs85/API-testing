@@ -1,10 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 
 export default function ResultsDisplay() {
-  const [results, setResults] = useState<string | null>(null)
+  const [results] = useState<string | null>(null)
 
   // This component will be updated with the actual results from the API test
   return (
@@ -22,4 +22,3 @@ export default function ResultsDisplay() {
     </Card>
   )
 }
-

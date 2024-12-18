@@ -12,25 +12,25 @@ function mockGoogleApi(service: string) {
 
 export async function POST(request: Request) {
   try {
-    const { token, service } = await request.json()
+    const { service } = await request.json()
 
     let api;
     switch (service) {
       case 'youtube':
         api = mockGoogleApi(service)
-        await api.channels.list({ part: ['snippet'], mine: true })
+        await api.channels.list()
         break
       case 'drive':
         api = mockGoogleApi(service)
-        await api.files.list({ pageSize: 1 })
+        await api.files.list()
         break
       case 'sheets':
         api = mockGoogleApi(service)
-        await api.spreadsheets.get({ spreadsheetId: 'your-test-spreadsheet-id' })
+        await api.spreadsheets.get()
         break
       case 'gmail':
         api = mockGoogleApi(service)
-        await api.users.getProfile({ userId: 'me' })
+        await api.users.getProfile()
         break
       case 'calendar':
         api = mockGoogleApi(service)
@@ -46,4 +46,3 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: false, message: 'Token is invalid' }, { status: 400 })
   }
 }
-

@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card'
 
 export default function DocsPage() {
   return (
@@ -50,11 +50,11 @@ export default function DocsPage() {
               </div>
               <div>
                 <dt className="font-semibold">API Not Enabled</dt>
-                <dd>Make sure you've enabled the API you're trying to test in the Google Cloud Console.</dd>
+                <dd>Make sure you&apos;ve enabled the API you&apos;re trying to test in the Google Cloud Console.</dd>
               </div>
               <div>
                 <dt className="font-semibold">Quota Exceeded</dt>
-                <dd>Check your Google Cloud Console to ensure you haven't exceeded your API quota limits.</dd>
+                <dd>Check your Google Cloud Console to ensure you haven&apos;t exceeded your API quota limits.</dd>
               </div>
             </dl>
           </CardContent>
@@ -63,4 +63,3 @@ export default function DocsPage() {
     </div>
   )
 }
-

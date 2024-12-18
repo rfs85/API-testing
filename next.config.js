@@ -1,9 +1,8 @@
 const nextConfig = {
   reactStrictMode: true,
   experimental: {
-    optimizeFonts: true,
+    // Removed optimizeFonts
   },
 }
 
 module.exports = nextConfig
-

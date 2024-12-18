@@ -1,10 +1,10 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { useToast } from '@/hooks/use-toast'
+import { Button } from './ui/button'
+import { Input } from './ui/input'
+import { Label } from './ui/label'
+import { useToast } from '../hooks/use-toast'
 import {
   Table,
   TableBody,
@@ -12,7 +12,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from './ui/table'
 import { Trash2 } from 'lucide-react'
 
 interface ApiKey {
@@ -29,10 +29,6 @@ export function ApiKeyManager() {
   const [newProjectId, setNewProjectId] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const { toast } = useToast()
-
-  useEffect(() => {
-    fetchApiKeys()
-  }, [])
 
   const fetchApiKeys = async () => {
     try {
@@ -51,6 +47,10 @@ export function ApiKeyManager() {
       setIsLoading(false)
     }
   }
+
+  useEffect(() => {
+    fetchApiKeys()
+  }, [])
 
   const handleAddKey = async () => {
     if (newKeyName && newApiKey && newProjectId) {

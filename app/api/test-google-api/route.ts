@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { RateLimiter } from 'limiter'
-import { google } from 'googleapis'
+import { google, youtube_v3, drive_v3, sheets_v4, calendar_v3, gmail_v1 } from 'googleapis'
 
 // Create a rate limiter: 5 requests per minute
 const limiter = new RateLimiter({ tokensPerInterval: 5, interval: 'minute' })
@@ -13,14 +13,13 @@ export async function POST(request: Request) {
   }
 
   try {
-    const { apiKey, projectId, service, testType } = await request.json()
+    const { apiKey, service, testType } = await request.json()
 
     const auth = new google.auth.GoogleAuth({
-      key: apiKey,
       scopes: [`https://www.googleapis.com/auth/${service}`],
     })
 
-    const results = []
+    const results: Array<{ success: boolean; message: string; details?: string }> = []
 
     // Test authentication
     try {
@@ -30,30 +29,36 @@ export async function POST(request: Request) {
         message: 'Authentication successful',
       })
     } catch (error) {
+      const err = error as Error
       results.push({
         success: false,
         message: 'Authentication failed',
-        details: error.message,
+        details: err.message,
       })
       return NextResponse.json({ results })
     }
 
     // Perform service-specific tests
-    const api = google.googleApi(service)
+    let api: any
     switch (service) {
       case 'youtube':
+        api = google.youtube({ version: 'v3', auth, params: { key: apiKey } }) as youtube_v3.Youtube
         results.push(...await testYouTubeAPI(api, testType))
         break
       case 'drive':
+        api = google.drive({ version: 'v3', auth, params: { key: apiKey } }) as drive_v3.Drive
         results.push(...await testDriveAPI(api, testType))
         break
       case 'sheets':
+        api = google.sheets({ version: 'v4', auth, params: { key: apiKey } }) as sheets_v4.Sheets
         results.push(...await testSheetsAPI(api, testType))
         break
       case 'calendar':
+        api = google.calendar({ version: 'v3', auth, params: { key: apiKey } }) as calendar_v3.Calendar
         results.push(...await testCalendarAPI(api, testType))
         break
       case 'gmail':
+        api = google.gmail({ version: 'v1', auth, params: { key: apiKey } }) as gmail_v1.Gmail
         results.push(...await testGmailAPI(api, testType))
         break
       default:
@@ -64,40 +69,29 @@ export async function POST(request: Request) {
     }
 
     // Get permissions
-    //const permissions = await getPermissions(auth, projectId)
-    const permissions = [] // Placeholder for permissions
+    const permissions: any[] = [] // Placeholder for permissions
 
     return NextResponse.json({ results, permissions })
   } catch (error) {
-    console.error('Google API test error:', error)
+    const err = error as Error
+    console.error('Google API test error:', err)
     return NextResponse.json({
       results: [{
         success: false,
         message: 'An error occurred while testing the Google API',
-        details: error.message,
+        details: err.message,
       }],
     }, { status: 500 })
   }
 }
 
-function mockGoogleApi(service: string) {
-  return {
-    channels: { list: async () => ({ data: { items: [{ id: 'mock-channel-id', snippet: { title: 'Mock Channel' } }] } }) },
-    files: { list: async () => ({ data: { files: [{ id: 'mock-file-id', name: 'Mock File' }] } }) },
-    spreadsheets: { get: async () => ({ data: { properties: { title: 'Mock Spreadsheet' } } }) },
-    users: { getProfile: async () => ({ data: { emailAddress: 'mock@example.com' } }) },
-    calendarList: { list: async () => ({ data: { items: [{ id: 'mock-calendar-id', summary: 'Mock Calendar' }] } }) },
-  }
-}
-
-
-async function testYouTubeAPI(api, testType) {
-  const results = []
+async function testYouTubeAPI(api: youtube_v3.Youtube, testType: string) {
+  const results: Array<{ success: boolean; message: string; details?: string }> = []
 
   if (testType === 'read' || testType === 'auth') {
     try {
       const response = await api.channels.list({
-        part: 'snippet',
+        part: ['snippet'],
         mine: true,
       })
       results.push({
@@ -106,10 +100,11 @@ async function testYouTubeAPI(api, testType) {
         details: JSON.stringify(response.data, null, 2),
       })
     } catch (error) {
+      const err = error as Error
       results.push({
         success: false,
         message: 'Failed to retrieve YouTube channel data',
-        details: error.message,
+        details: err.message,
       })
     }
   }
@@ -123,10 +118,11 @@ async function testYouTubeAPI(api, testType) {
         details: 'Mock response',
       })
     } catch (error) {
+      const err = error as Error
       results.push({
         success: false,
         message: 'Failed to create a YouTube playlist',
-        details: error.message,
+        details: err.message,
       })
     }
   }
@@ -134,8 +130,8 @@ async function testYouTubeAPI(api, testType) {
   return results
 }
 
-async function testDriveAPI(api, testType) {
-  const results = []
+async function testDriveAPI(api: drive_v3.Drive, testType: string) {
+  const results: Array<{ success: boolean; message: string; details?: string }> = []
 
   if (testType === 'read' || testType === 'auth') {
     try {
@@ -149,10 +145,11 @@ async function testDriveAPI(api, testType) {
         details: JSON.stringify(response.data, null, 2),
       })
     } catch (error) {
+      const err = error as Error
       results.push({
         success: false,
         message: 'Failed to retrieve Google Drive files',
-        details: error.message,
+        details: err.message,
       })
     }
   }
@@ -166,10 +163,11 @@ async function testDriveAPI(api, testType) {
         details: 'Mock response',
       })
     } catch (error) {
+      const err = error as Error
       results.push({
         success: false,
         message: 'Failed to create a file in Google Drive',
-        details: error.message,
+        details: err.message,
       })
     }
   }
@@ -177,8 +175,8 @@ async function testDriveAPI(api, testType) {
   return results
 }
 
-async function testSheetsAPI(api, testType) {
-  const results = []
+async function testSheetsAPI(api: sheets_v4.Sheets, testType: string) {
+  const results: Array<{ success: boolean; message: string; details?: string }> = []
 
   if (testType === 'read' || testType === 'auth') {
     try {
@@ -191,10 +189,11 @@ async function testSheetsAPI(api, testType) {
         details: JSON.stringify(response.data, null, 2),
       })
     } catch (error) {
+      const err = error as Error
       results.push({
         success: false,
         message: 'Failed to retrieve Google Sheets data',
-        details: error.message,
+        details: err.message,
       })
     }
   }
@@ -208,10 +207,11 @@ async function testSheetsAPI(api, testType) {
         details: 'Mock response',
       })
     } catch (error) {
+      const err = error as Error
       results.push({
         success: false,
         message: 'Failed to append data to Google Sheets',
-        details: error.message,
+        details: err.message,
       })
     }
   }
@@ -219,8 +219,8 @@ async function testSheetsAPI(api, testType) {
   return results
 }
 
-async function testCalendarAPI(api, testType) {
-  const results = []
+async function testCalendarAPI(api: calendar_v3.Calendar, testType: string) {
+  const results: Array<{ success: boolean; message: string; details?: string }> = []
 
   if (testType === 'read' || testType === 'auth') {
     try {
@@ -231,10 +231,11 @@ async function testCalendarAPI(api, testType) {
         details: JSON.stringify(response.data, null, 2),
       })
     } catch (error) {
+      const err = error as Error
       results.push({
         success: false,
         message: 'Failed to retrieve Google Calendar events',
-        details: error.message,
+        details: err.message,
       })
     }
   }
@@ -248,10 +249,11 @@ async function testCalendarAPI(api, testType) {
         details: 'Mock response',
       })
     } catch (error) {
+      const err = error as Error
       results.push({
         success: false,
         message: 'Failed to create a Google Calendar event',
-        details: error.message,
+        details: err.message,
       })
     }
   }
@@ -259,8 +261,8 @@ async function testCalendarAPI(api, testType) {
   return results
 }
 
-async function testGmailAPI(api, testType) {
-  const results = []
+async function testGmailAPI(api: gmail_v1.Gmail, testType: string) {
+  const results: Array<{ success: boolean; message: string; details?: string }> = []
 
   if (testType === 'read' || testType === 'auth') {
     try {
@@ -271,10 +273,11 @@ async function testGmailAPI(api, testType) {
         details: JSON.stringify(response.data, null, 2),
       })
     } catch (error) {
+      const err = error as Error
       results.push({
         success: false,
         message: 'Failed to retrieve Gmail messages',
-        details: error.message,
+        details: err.message,
       })
     }
   }
@@ -288,10 +291,11 @@ async function testGmailAPI(api, testType) {
         details: 'Mock response',
       })
     } catch (error) {
+      const err = error as Error
       results.push({
         success: false,
         message: 'Failed to send a Gmail message',
-        details: error.message,
+        details: err.message,
       })
     }
   }
@@ -300,4 +304,3 @@ async function testGmailAPI(api, testType) {
 }
 
 //async function getPermissions(auth, projectId) { ... } //Removed as not needed for mock
-
