@@ -54,7 +54,7 @@ export default function ProfilePage() {
       <h1 className="text-3xl font-bold">User Profile</h1>
       <Card>
         <CardHeader>
-          <CardTitle>Your Information</CardTitle>
+          <CardTitle>Your more Information</CardTitle>
           <CardDescription>Update your profile details</CardDescription>
         </CardHeader>
         <CardContent>
