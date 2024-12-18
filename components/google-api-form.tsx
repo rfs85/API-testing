@@ -1,19 +1,19 @@
 "use client"
 
 import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { useToast } from '@/components/ui/use-toast'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { Button } from './ui/button'
+import { Input } from './ui/input'
+import { Label } from './ui/label'
+import { useToast } from '../hooks/use-toast'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from './ui/card'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion'
+import { Alert, AlertDescription, AlertTitle } from './ui/alert'
 import { Loader2, CheckCircle, XCircle } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
-import { ErrorBoundary } from '@/components/error-boundary'
+import { Badge } from './ui/badge'
+import { Progress } from './ui/progress'
+import { ErrorBoundary } from './error-boundary'
 
 const API_SERVICES = [
   { value: 'youtube', label: 'YouTube Data API' },
@@ -40,8 +40,7 @@ export default function GoogleApiForm() {
   const [progress, setProgress] = useState(0)
   const { toast } = useToast()
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSubmit = async () => {
     setIsLoading(true)
     setTestResults([])
     setProgress(0)
@@ -125,7 +124,7 @@ export default function GoogleApiForm() {
       </CardHeader>
       <CardContent>
         <ErrorBoundary>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }} className="space-y-4">
           <div className="grid gap-2">
             <Label htmlFor="apiKey">API Key</Label>
             <Input
@@ -254,4 +253,3 @@ export default function GoogleApiForm() {
     </Card>
   )
 }
-
